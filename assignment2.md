@@ -57,7 +57,7 @@ Implement the disk emulator functions as follows:
 
 #### `int create_disk(char *filename, int nbytes)`
 
-Creates a disk file of size `nbytes`. Initializes disk_stat struct with calculated number of blocks reads and writes as 0. Writes it to the first block. Returns 0 if successful, -1 for error.
+Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calculated number of blocks, and reads, writes as 0. Writes it to the befinning of the disk. Returns 0 if successful, -1 for error.
 
 **CHECK**: Remember to close the file and free the memory for disk_stat 
 
@@ -66,25 +66,19 @@ Creates a disk file of size `nbytes`. Initializes disk_stat struct with calculat
 
 Opens the disk file of given filename. Check if valid stat is present. Return the file descriptor if successful. Return error otherwise.
 
-CHECK: File descriptor not pointer. Free the stat.
+**CHECK**: File descriptor not pointer. Free the stat.
 
 
-disk_stat* get_disk_stat(int disk);
+#### `disk_stat* get_disk_stat(int disk)`
 
 Reads disk_stat from the disk. And returns its pointer.
 
 
+#### `int read_block(int disk, int blocknr, void *block_data)`
 
+Assumes that `block_data` is a 4KB buffer. Checks if `blocknr` is a valid block pointer. Reads the block contents into the buffer. Returns 0 if success, -1 otherwise. Also updates the disk_stat to increment the reads count.
 
-
-
-
-
-int read_block(int disk, int blocknr, void *block_data);
-
-Assumes that block_data is a 4KB buffer. Checks if blocknr is a valid block pointer. Reads the block contents into the buffer. Returns 0 if success, -1 otherwise. Also updates the disk_stat to increment the reads count.
-
-CHECK: valid block pointer check is done or not. Check if memory is freed for disk_stat.
+**CHECK:** valid block pointer check is done or not. Check if memory is freed for disk_stat.
 
 int write_block(int disk, int blocknr, void *block_data);
 
