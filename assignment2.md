@@ -1,24 +1,25 @@
 
 # CS60038: Assignment 2
 
-Building a simple file system with an emulated disk
+Building a simple file system with an emulated disk, and interfacing with FUSE.
 
-Assignment Date: 7th August 2019\
-Deadline: 28th August 2019, EOD
+Assignment Date: \
+Deadline: 28th 
 
 ---
 
 The objective of this assignment is to get hands-on experience in building a simple file system.
 
 
-This assignment will involve building three components:
+This assignment will involve building four parts:
 
-* **A disk emulator**
-* **A simple file system**
-* **FUSE interface**
+* **PART A: Building a  disk emulator**
+* **PART B: Implementing a simple file system - SFS**
+* **PART C: Implementing directory structure in  SFS**
+* **PARC D: FUSE interface for SFS**
 
 
-## Disk Emulator
+## PART A: Disk Emulator
 
 Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a file based disk emulator using standard open, read, write, and lseek calls in Linux. This will provide APIs for block level access to the emulated disk. Along with that the disk will mantain some stats about its usage.
 
@@ -94,7 +95,7 @@ Close the emulated disk file.
 
 
 
-## Simple File System SFS
+## PART B: Simple File System SFS
 
 Using the emulated disk we will be implementing a simple file system: SFS. Let us first take a look a the file system layout:
 
@@ -229,7 +230,7 @@ First checks if `inumber`, `offset` and `length` are valid or not. In case the `
 
 First checks if `inumber`and `offset` are valid. Then write data to a valid inode by copying `length` bytes from the buffer `data` into the data blocks of the inode starting at offset bytes. Allocate any necessary direct and indirect blocks in the process. Also update the bitmaps accordingly. Returns the number of bytes actually written. In case of any error return `-1`. If the disk is full (no free data blocks left, write as much data as possible and return the number of bytes written).
 
-## File and directory structure in SFS
+## PART C: File and directory structure in SFS
 
 Now since we have the basic functions to create, remove, read and write files, we need build a directory structure to organize files. Use the functions above to create your own directory structure. Remember every directory is also a file, and the file contains a list of its children. The list should contain:
 * valid bit (unset when a file or directory is deleted and can be replace by some other entry later)
@@ -253,7 +254,7 @@ int create_dir(char *dirpath);
 int remove_dir(char *dirpath);
 ```
 
-## Interfacing with FUSE
+## PART D: Interfacing with FUSE
 
 FUSE (Filesystem in Userspace) is an interface for userspace programs to export a filesystem to the Linux kernel. FUSE is particularly useful for writing virtual file systems. Unlike traditional file systems that essentially save data to and retrieve data from disk, virtual filesystems do not actually store data themselves. They act as a view or translation of an existing file system or storage device.
 
