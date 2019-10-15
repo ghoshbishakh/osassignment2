@@ -205,7 +205,7 @@ Return 0 if successful, -1 otherwise.
 
 #### `int mount(int disk)`
 
-This method first attempts to read the superblock and then verify the magic_number. If this is successful, a valid SFS is detected. In that case load the bitmaps into the memory. Also mark that the file system is already mounted so that `format` will fail in case it is attempted on a already mounted filesystem. Return 0 if successful, -1 otherwise.
+This method first attempts to read the superblock and then verify the magic_number. If this is successful, a valid SFS is detected. In that case load the bitmaps into the memory. Return 0 if successful, -1 otherwise. The except format, and mount, other functions should return error when operating on unmounted filesystem. 
 
 
 #### `int create_file()`
