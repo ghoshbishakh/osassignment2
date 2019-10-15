@@ -55,14 +55,14 @@ Therefore, if we consider a disk of size `409600 bytes = (4KB x 100)`, the numbe
 Implement the disk emulator functions as follows:
 
 
-#### int create_disk(char *filename, int nbytes);
+#### `int create_disk(char *filename, int nbytes)`
 
-Creates a disk file of size nbytes. Initializes disk_stat struct with calculated number of blocks reads and writes as 0. Writes it to the first block. Returns 0 if successful, -1 for error.
+Creates a disk file of size `nbytes`. Initializes disk_stat struct with calculated number of blocks reads and writes as 0. Writes it to the first block. Returns 0 if successful, -1 for error.
 
-CHECK: Remember to close the file and free the memory for disk_stat 
+**CHECK**: Remember to close the file and free the memory for disk_stat 
 
 
-int open_disk(char *filename);
+#### `int open_disk(char *filename)`
 
 Opens the disk file of given filename. Check if valid stat is present. Return the file descriptor if successful. Return error otherwise.
 
