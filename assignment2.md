@@ -104,16 +104,9 @@ SFS will have the following components:
 * Inode Bitmap
 * Data block bitmap
 
-Super Block
+#### Super Block
 The first block of SFS will be the super block.
 The super block will have the following info:
-
-MAGIC
-Blocks
-Inode Blocks
-Inodes
-Data Block Bitmap Length
-Inode Bitmap Length
 
 ```c
 typedef struct super_block {
@@ -131,7 +124,7 @@ typedef struct super_block {
 } super_block;
 ```
 
-Inodes and Inode Blocks
+#### Inodes and Inode Blocks
 
 ```c
 typedef struct inode {
@@ -151,10 +144,25 @@ According to the total number of inodes, the length of the inode bit map is set.
 Rest of the blocks are used for data blocks and bit map for data block.
 
 
+#### Data Blocks
+
+#### Indirect Blocks
+
+#### Inode Bitmap
+
+#### Data block bitmap
 
 
 
+The following interfaces needs to be implemented for SFS:
 
-The following interfaces needs to be implemented for SFS
-
+```c
+int format(int disk);
+int mount(int disk);
+int create();
+int remove(int inumber);
+int stat(int inumber);
+int read(int inumber, char *data, int length, int offset);
+int write(int inumber, char *data, int length, int offset);
+```
 
