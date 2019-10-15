@@ -205,17 +205,23 @@ Return 0 if successful, -1 otherwise.
 
 #### `int mount(int disk)`
 
+This method first attempts to read the superblock and then verify the magic_number. If this is successful, a valid SFS is detected. In that case load the bitmaps into the memory. Also mark that the file system is already mounted so that `format` will fail in case it is attempted on a already mounted filesystem. Return 0 if successful, -1 otherwise.
+
 
 #### `int create()`
 
+Creates a new inode and returns the inode pointer - inumber. Initialize the size to 0 and valid to 1. Accordingly update the inode bitmap (not only in memory but also on the disk). Return -1 if error or if no inodes are left.
 
 #### `int remove(int inumber)`
 
+Removes an inode along with all corresponding data blocks and indirect pointer blocks. Just set valid to 0, and update the bitmaps.
 
 #### `int stat(int inumber)`
 
+Returns the stats of the input inode: logical size, and number of data blocks in use, number of direct and indirect pointers in use.
 
 #### `int read(int inumber, char *data, int length, int offset)`
+
 
 
 #### `int write(int inumber, char *data, int length, int offset)`
