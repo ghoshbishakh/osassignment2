@@ -152,11 +152,15 @@ Data blocks are the blocks used for storing actual file contents. We can also us
 
 #### Indirect Blocks
 
-These are data blocks storing pointers to other data blocks. In case direct pointers are not enought to accomodate al the block pointers, the indirect blocks will be used to store more pointers.
+These are data blocks storing pointers to other data blocks. In case direct pointers are not enought to accomodate al the block pointers, the indirect blocks will be used to store more pointers. Each pointer is an integer of `4 bytes`, so one indirect block will hold `1024` such pointers.
 
 #### Inode Bitmap
 
+The inode bitmap is used to determine which inodes are occupied and which are free. Accordingly while creating an inode, the first inode index is determined from this bitmap.
+
 #### Data block bitmap
+
+Similar to inode bitmap, the data block bitmap is used to find out which blocks are free or used.
 
 
 
