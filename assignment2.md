@@ -22,13 +22,14 @@ Since it is difficult to test our file system on a physical raw disk, we will ne
 
 The disk interface will have the following:
 
-	int create_disk(char *filename, int nbytes);
-	int open_disk(char *filename);
-	disk_stat* get_disk_stat(int disk);
-	int read_block(int disk, int blocknr, void *block_data);
-	int write_block(int disk, int blocknr, void *block_data);
-	int close_disk(int disk);
-
+```c
+int create_disk(char *filename, int nbytes);
+int open_disk(char *filename);
+disk_stat* get_disk_stat(int disk);
+int read_block(int disk, int blocknr, void *block_data);
+int write_block(int disk, int blocknr, void *block_data);
+int close_disk(int disk);
+```
 
 
 
