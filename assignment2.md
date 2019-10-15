@@ -169,8 +169,8 @@ The following functions needs to be implemented for SFS:
 ```c
 int format(int disk);
 int mount(int disk);
-int create();
-int remove(int inumber);
+int create_file();
+int remove_file(int inumber);
 int stat(int inumber);
 int read(int inumber, char *data, int length, int offset);
 int write(int inumber, char *data, int length, int offset);
@@ -208,11 +208,11 @@ Return 0 if successful, -1 otherwise.
 This method first attempts to read the superblock and then verify the magic_number. If this is successful, a valid SFS is detected. In that case load the bitmaps into the memory. Also mark that the file system is already mounted so that `format` will fail in case it is attempted on a already mounted filesystem. Return 0 if successful, -1 otherwise.
 
 
-#### `int create()`
+#### `int create_file()`
 
 Creates a new inode and returns the inode pointer - that is the index of the inode (starting from 0). Initialize the size to 0 and valid to 1. Accordingly update the inode bitmap (not only in memory but also on the disk). Return -1 if error or if no inodes are left.
 
-#### `int remove(int inumber)`
+#### `int remove_file(int inumber)`
 
 Removes an inode along with all corresponding data blocks and indirect pointer blocks. Just set valid to 0, and update the bitmaps.
 
