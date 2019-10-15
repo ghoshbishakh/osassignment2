@@ -246,7 +246,7 @@ You may modify it to include other information if required. (provide justificati
 
 Implement the following additional functins to read and write files with file path:
 
-```
+```c
 int read_file(char *filepath, char *data, int length, int offset);
 int write_file(char *filepath, char *data, int length, int offset);
 int create_dir(char *dirpath);
