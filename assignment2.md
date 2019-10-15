@@ -14,13 +14,13 @@ The objective of this assignment is to get hands-on experience in building a sim
 This assignment will involve building three components:
 
 * **A disk emulator**
-* **A simple file system: SFS**
+* **A simple file system**
 * **FUSE interface**
 
 
 ## Disk Emulator
 
-Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a simple file based disk emulator using standard open, read, write, and lseek calls in Linux. This will provide APIs for block level access to the emulated disk.
+Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a file based disk emulator using standard open, read, write, and lseek calls in Linux. This will provide APIs for block level access to the emulated disk. Along with that the disk will mantain some stats about its usage.
 
 Our disk emulator interface will have the following:
 
@@ -34,7 +34,7 @@ int close_disk(int disk);
 ```
 
 
-The disk will have fixed block size of `4KB` (4019 bytes). In addition to providing the API for reading and writing blocks, it will also maintain some stats about the disk.
+The disk will have fixed block size of `4KB` (4019 bytes). In addition to providing the API for reading and writing blocks, it will maintain some stats about the disk.
 
 
 The structure for the stats is as follows:
