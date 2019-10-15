@@ -51,13 +51,15 @@ typedef struct disk {
 These stats will take up `16 bytes` of storage at the beginning of the disk.
 
 Therefore, if we consider a disk of size `409600 bytes = (4KB x 100)`, the number of usable blocks will be `99`.
+Again, if we consider a disk of size `409616 bytes = (4KB x 100) + 16`, the number of usable blocks will be `100`.
+
 
 Implement the disk emulator functions as follows:
 
 
 #### `int create_disk(char *filename, int nbytes)`
 
-Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calculated number of blocks, and reads, writes as 0. Writes it to the befinning of the disk. Returns 0 if successful, -1 for error.
+Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calculated number of blocks, and reads, writes as 0. Writes it to the beginning of the disk. Returns 0 if successful, -1 for error. The size of the disk file must be exactly nbytes.
 
 **CHECK**: Remember to close the file and free the memory for disk_stat 
 
