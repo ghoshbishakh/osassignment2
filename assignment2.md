@@ -13,9 +13,9 @@ The objective of this assignment is to get hands-on experience in building a sim
 
 This assignment will involve building three components:
 
-* A disk emulator
-* A simple file system
-* FUSE interface
+* **A disk emulator**
+* **A simple file system: SFS**
+* **FUSE interface**
 
 
 ## Disk Emulator
@@ -64,7 +64,7 @@ Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calcul
 
 #### `int open_disk(char *filename)`
 
-Opens the disk file of given filename. Check if valid stat is present. Return the file descriptor if successful. Return error otherwise.
+Opens the disk file of given filename. Check if valid stat is present. Return the **file descriptor** if successful. Return error otherwise.
 
 **CHECK**: File descriptor not pointer. Free the stat.
 
@@ -76,33 +76,33 @@ Reads disk_stat from the disk. And returns its pointer.
 
 #### `int read_block(int disk, int blocknr, void *block_data)`
 
-Assumes that `block_data` is a 4KB buffer. Checks if `blocknr` is a valid block pointer. Reads the block contents into the buffer. Returns 0 if success, -1 otherwise. Also updates the disk_stat to increment the reads count.
+Assumes that `block_data` is a 4KB buffer. Checks if `blocknr` is a valid block pointer. Reads the block contents into the buffer. Returns 0 if success, -1 otherwise. Also updates the `disk_stat` to increment the `reads` count.
 
 **CHECK:** valid block pointer check is done or not. Check if memory is freed for disk_stat.
 
-int write_block(int disk, int blocknr, void *block_data);
+#### `int write_block(int disk, int blocknr, void *block_data)`
 
-Assumes that the block_data is a 4KB buffer. Check if blocknr is a valid block pointer. Write the contents of the block_data buffer into the correct block. Return 0 if success, -1 otherwise. Also, update the disk_stat to increment the writes counter.
-NOTE: Updating disk_stat does not affect the writes counter.
+Assumes that the `block_data` is a `4KB` buffer. Check if `blocknr` is a valid block pointer. Write the contents of the `block_data` buffer into the correct block. Return 0 if success, -1 otherwise. Also, update the `disk_stat` to increment the `writes` counter.\
+**NOTE**: Updating disk_stat does not affect the writes counter.
 
 
-int close_disk(int disk);
+#### `int close_disk(int disk)`
 
 Close the emulated disk file.
 
 
 
-Simple File System SFS
+## Simple File System SFS
 
-Using the emulated disk we will be implementing a simple file system. Let us first take a look a the file system layout:
+Using the emulated disk we will be implementing a simple file system: SFS. Let us first take a look a the file system layout:
 
 SFS will have the following components:
-Super Block
-Inodes and Inode Blocks
-Data Blocks
-Indirect Blocks
-Inode Bitmap
-Data block bitmap
+* Super Block
+* Inodes and Inode Blocks
+* Data Blocks
+* Indirect Blocks
+* Inode Bitmap
+* Data block bitmap
 
 Super Block
 The first block of SFS will be the super block.
