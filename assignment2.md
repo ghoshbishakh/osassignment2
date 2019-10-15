@@ -181,7 +181,7 @@ int write(int inumber, char *data, int length, int offset);
 This function takes input the file descriptor of the emulated disk. In order to write the super block first we need to calculate all the values of blocks, indexes etc.. So the organization of the file system needs to be decided first. This is done as follows:
 
 If the disk has `N` blocks (usable blocks as specified in `disk_stat`), one block is reserved for the super block. Therefore we have `M = N - 1` blocks remaining.
-Among these M blocks, 10 percent is reserved for inode blocks. Therefore the number of inode blocks is `I = 0.1 * M`. This is also the length of the inode bitmap (in bits). Therefore the number of blocks reserved for the inode bitmap will be `IB = (I / 8) / 4096`.
+Among these M blocks, 10 percent is reserved for inode blocks. Therefore the number of inode blocks is `I = 0.1 * M` (take floor). This is also the length of the inode bitmap (in bits). Therefore the number of blocks reserved for the inode bitmap will be `IB = (I / 8) / 4096` (take ceil).
 
 Therefore the remaining number of blocks is `R = M - I - IB`. These will be used as data blocks and data block bitmap blocks. For simplicity, consider that the length of the data block bitmap is `R bits`. Therefore the number of blocks required for data block bitmap is `DBB = (R / 8) / 4096`. Therefore, the remaining are data blocks: `DB = R - DBB`.
 
