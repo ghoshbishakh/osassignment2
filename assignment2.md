@@ -4,7 +4,7 @@
 Building a simple file system with an emulated disk, and interfacing with FUSE.
 
 Assignment Date: \
-Deadline: 28th 
+Deadline: 
 
 ---
 
@@ -21,16 +21,21 @@ This assignment will involve building four parts:
 
 ## PART A: Disk Emulator
 
-Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a file based disk emulator using standard open, read, write, and lseek calls in Linux. This will provide APIs for block level access to the emulated disk. Along with that the disk will mantain some stats about its usage.
+Since it is difficult to test our file system on a physical raw disk, we will need to emulate it. For that we are going to create a file based disk emulator using standard open, read, write, and lseek calls in Linux. This will provide APIs for block level access to the emulated disk. Along with that, the disk will mantain some stats about its usage.
 
 Our disk emulator interface will have the following:
 
 ```c
 int create_disk(char *filename, int nbytes);
+
 int open_disk(char *filename);
+
 disk_stat* get_disk_stat(int disk);
+
 int read_block(int disk, int blocknr, void *block_data);
+
 int write_block(int disk, int blocknr, void *block_data);
+
 int close_disk(int disk);
 ```
 
@@ -44,7 +49,7 @@ The structure for the stats is as follows:
 typedef struct disk {
     uint32_t size; // size of the entire disk file
     uint32_t blocks; // number of blocks (except stat block)
-    uint32_t reads; // number of block reads performed
+    uint32_t reads; // number of block reads performed (except stat block)
     uint32_t writes; // number of block writes performed
 } disk_stat;
 ```
@@ -60,9 +65,7 @@ Implement the disk emulator functions as follows:
 
 #### `int create_disk(char *filename, int nbytes)`
 
-Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calculated number of blocks, and reads, writes as 0. Writes it to the beginning of the disk. Returns 0 if successful, -1 for error. The size of the disk file must be exactly nbytes.
-
-**CHECK**: Remember to close the file and free the memory for disk_stat 
+Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calculated number of blocks, and reads, writes as 0. Writes it to the beginning of the disk. Returns 0 if successful, -1 for error. The size of the disk file must be exactly `nbytes`.
 
 
 #### `int open_disk(char *filename)`
@@ -268,3 +271,15 @@ Tutorials:
 
 
 * [http://gauss.ececs.uc.edu/Courses/c4029/labs/Fuse/index.html](http://gauss.ececs.uc.edu/Courses/c4029/labs/Fuse/index.html)
+
+
+## Note
+
+#### The students have to submit the source code compatible with the header files provided. A Makefile is also included for compiling the code. Implement the disk emulator code and SFS code in disc.c and sfs.c respectively. For FUSE you may create your own files and change the Makefile accordingly. Use main.c to test the codes. 
+
+#### In every source code file, students need to comment their name, roll number.
+
+
+### Do not make any assumption. If you find anything ambiguous in the assignment statement, do not hesitate to post it to the piazza.
+
+#### DO NOT COPY CODE FROM OTHER GROUPS. WE WILL NOT EVALUATE A SOLUTION IF FOUND COPIED. ALL INVOLVED GROUPS WILL BE AWARDED ZERO.
