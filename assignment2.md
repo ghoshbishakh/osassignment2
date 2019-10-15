@@ -222,6 +222,10 @@ Returns the stats of the input inode: logical size, and number of data blocks in
 
 #### `int read(int inumber, char *data, int length, int offset)`
 
+First checks if `inumber`, `offset` and `length` are valid or not. In case the `inumber` is invalid or `offset` in out of range return error (`-1`). If length is out of range read only till the end of the file and return the length of the data read (in bytes). The data is read into the buffer `data`, which is assumed to be of length `length`. In case of any error return `-1`.
 
 
 #### `int write(int inumber, char *data, int length, int offset)`
+
+First checks if `inumber`and `offset` are valid. Then write data to a valid inode by copying `length` bytes from the buffer `data` into the data blocks of the inode starting at offset bytes. Allocate any necessary direct and indirect blocks in the process. Also update the bitmaps accordingly. Returns the number of bytes actually written. In case of any error return `-1`. If the disk is full (no free data blocks left, write as much data as possible and return the number of bytes written).
+
