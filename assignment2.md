@@ -146,7 +146,11 @@ Rest of the blocks are used for data blocks and bit map for data block.
 
 #### Data Blocks
 
+Data blocks are the blocks used for storing actual file contents. We can also use these blocks as indirect blocks for storing indirect block pointers. Later we will be using these data blocks for storing directory structure also.
+
 #### Indirect Blocks
+
+These are data blocks storing pointers to other data blocks. In case direct pointers are not enought to accomodate al the block pointers, the indirect blocks will be used to store more pointers.
 
 #### Inode Bitmap
 
