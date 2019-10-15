@@ -137,7 +137,7 @@ typedef struct inode {
 } inode;
 ```
 
-Therefore the size of each inode is x bytes. Each inode block will contain y inodes.
+Therefore the size of each inode is 32 bytes. Each inode block will contain 128 inodes.
 
 The number of blocks assigned for inodes will be 10% of the total number of available blocks in the disk (except super block).
 
@@ -183,7 +183,7 @@ This function takes input the file descriptor of the emulated disk. In order to 
 If the disk has `N` blocks (usable blocks as specified in `disk_stat`), one block is reserved for the super block. Therefore we have `M = N - 1` blocks remaining.
 Among these M blocks, 10 percent is reserved for inode blocks. Therefore the number of inode blocks is `I = 0.1 * M` (take floor). This is also the length of the inode bitmap (in bits). Therefore the number of blocks reserved for the inode bitmap will be `IB = (I / 8) / 4096` (take ceil).
 
-Therefore the remaining number of blocks is `R = M - I - IB`. These will be used as data blocks and data block bitmap blocks. For simplicity, consider that the length of the data block bitmap is `R bits`. Therefore the number of blocks required for data block bitmap is `DBB = R / (8 * 4096)`. Therefore, the remaining are data blocks: `DB = R - DBB`.
+Therefore the remaining number of blocks is `R = M - I - IB`. These will be used as data blocks and data block bitmap blocks. For simplicity, consider that the length of the data block bitmap is `R bits`. Therefore the number of blocks required for data block bitmap is `DBB = R / (8 * 4096)` (take ceil). Therefore, the remaining are data blocks: `DB = R - DBB`. NOTE: we only consider the first `DB` number of bits of the data block bitmap. 
 
 The values of the superblock structure will be set as follows:
 
@@ -191,7 +191,7 @@ The values of the superblock structure will be set as follows:
 magic_number = 12345
 blocks = M
 inode_blocks = I
-inodes = I * 4096 / size of inode
+inodes = I * 128
 inode_bitmap_block_idx = 1
 inode_block_idx = 1 + IB + DBB
 data_block_bitmap_idx = 1 + IB
@@ -199,7 +199,7 @@ data_block_idx = 1 + IB + DBB + I
 data_blocks = DB
 ```
 
-The superblock is then written to the disk. The bitmaps are initialized.
+The superblock is then written to the disk. The bitmaps are initialized. The inodes are also initialized with `valid = 0`.
 
 Return 0 if successful, -1 otherwise.
 
