@@ -210,7 +210,7 @@ This method first attempts to read the superblock and then verify the magic_numb
 
 #### `int create()`
 
-Creates a new inode and returns the inode pointer - inumber. Initialize the size to 0 and valid to 1. Accordingly update the inode bitmap (not only in memory but also on the disk). Return -1 if error or if no inodes are left.
+Creates a new inode and returns the inode pointer - that is the index of the inode (starting from 0). Initialize the size to 0 and valid to 1. Accordingly update the inode bitmap (not only in memory but also on the disk). Return -1 if error or if no inodes are left.
 
 #### `int remove(int inumber)`
 
@@ -229,3 +229,18 @@ First checks if `inumber`, `offset` and `length` are valid or not. In case the `
 
 First checks if `inumber`and `offset` are valid. Then write data to a valid inode by copying `length` bytes from the buffer `data` into the data blocks of the inode starting at offset bytes. Allocate any necessary direct and indirect blocks in the process. Also update the bitmaps accordingly. Returns the number of bytes actually written. In case of any error return `-1`. If the disk is full (no free data blocks left, write as much data as possible and return the number of bytes written).
 
+## File and directory structure in SFS
+
+Now since we have the basic functions to create, remove, read and write files, we need build a directory structure to organize files. Use the functions above to create your own directory structure. Remember every directory is also a file, and the file contains a list of its children. The list should contain:
+* valid bit (unset when a file or directory is deleted and can be replace by some other entry later)
+* type bit: file / directory
+* the name of the file or directory (fix the allowed maximum length)
+* length of the name
+* inumber of the file or directory
+
+It may contain other information if required.
+
+
+## Interfacing with FUSE
+
+s
