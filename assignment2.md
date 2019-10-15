@@ -115,23 +115,32 @@ Inodes
 Data Block Bitmap Length
 Inode Bitmap Length
 
+```c
 typedef struct super_block {
-uint32_t MagicNumber;   // File system magic number
-	uint32_t Blocks;    	// Number of blocks in file system
-	uint32_t InodeBlocks;   // Number of blocks reserved for inodes
-	uint32_t BitMapBlocks;  // Number of blocks reserved for bitmap
-	uint32_t Inodes;    	// Number of inodes in file system
-} super_block;
+	uint32_t magic_number;	// File system magic number
+	uint32_t blocks;	// Number of blocks in file system (except super block)
 
+	uint32_t inode_blocks;	// Number of blocks reserved for inodes == 10% of Blocks
+	uint32_t inodes;	// Number of inodes in file system == length of inode bit map
+	uint32_t inode_bitmap_block_idx;  // Block Number of the first inode bit map block
+	uint32_t inode_block_idx;	// Block Number of the first inode block
+
+	uint32_t data_block_bitmap_idx;	// Block number of the first data bitmap block
+	uint32_t data_block_idx;	// Block number of the first data block
+	uint32_t data_blocks;  // Number of blocks reserved as data blocks
+} super_block;
+```
 
 Inodes and Inode Blocks
 
+```c
 typedef struct inode {
 	uint32_t valid; // 0 if invalid
-	Uint32_t size;
+	uint32_t size; // logical size of the file
 	uint32_t direct[5]; // direct data block pointer
 	uint32_t indirect; // indirect pointer
 } inode;
+```
 
 Therefore the size of each inode is x bytes. Each inode block will contain y inodes.
 
@@ -140,15 +149,6 @@ The number of blocks assigned for inodes will be 10% of the total number of avai
 According to the total number of inodes, the length of the inode bit map is set.
 
 Rest of the blocks are used for data blocks and bit map for data block.
-
-
-
-
-
-
-
-
-
 
 
 
