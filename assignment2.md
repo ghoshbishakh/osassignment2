@@ -238,7 +238,12 @@ Now since we have the basic functions to create, remove, read and write files, w
 * length of the name
 * inumber of the file or directory
 
-It may contain other information if required.
+Assign the first inode for the root directory file.
+
+You can use the following structure for the entries in the directory files:
+
+
+You may modify it to include other information if required. (provide justification)
 
 
 ## Interfacing with FUSE
