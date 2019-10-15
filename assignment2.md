@@ -243,4 +243,15 @@ It may contain other information if required.
 
 ## Interfacing with FUSE
 
-s
+FUSE (Filesystem in Userspace) is an interface for userspace programs to export a filesystem to the Linux kernel. FUSE is particularly useful for writing virtual file systems. Unlike traditional file systems that essentially save data to and retrieve data from disk, virtual filesystems do not actually store data themselves. They act as a view or translation of an existing file system or storage device.
+
+libfuse: [https://github.com/libfuse/libfuse](https://github.com/libfuse/libfuse)
+
+Documentation: [http://libfuse.github.io/doxygen/](http://libfuse.github.io/doxygen/)
+
+Tutorials:
+
+* [http://www.maastaar.net/fuse/linux/filesystem/c/2016/05/21/writing-a-simple-filesystem-using-fuse/](http://www.maastaar.net/fuse/linux/filesystem/c/2016/05/21/writing-a-simple-filesystem-using-fuse/)
+
+
+* [http://gauss.ececs.uc.edu/Courses/c4029/labs/Fuse/index.html](http://gauss.ececs.uc.edu/Courses/c4029/labs/Fuse/index.html)
