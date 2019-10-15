@@ -3,8 +3,7 @@
 
 Building a simple file system with an emulated disk
 
-Assignment Date: 7th August 2019
-
+Assignment Date: 7th August 2019\
 Deadline: 28th August 2019, EOD
 
 ---
@@ -21,9 +20,9 @@ This assignment will involve building three components:
 
 ## Disk Emulator
 
-Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a simple file based disk emulator using standard open, read, write, and seek files in Linux. This will provide APIs for block level access to the emulated disk.
+Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a simple file based disk emulator using standard open, read, write, and lseek calls in Linux. This will provide APIs for block level access to the emulated disk.
 
-The disk interface will have the following:
+Our disk emulator interface will have the following:
 
 ```c
 int create_disk(char *filename, int nbytes);
@@ -35,28 +34,28 @@ int close_disk(int disk);
 ```
 
 
-
-
-
-The disk will have fixed block size of 4KB. In addition to providing the API for reading and writing blocks, it will also maintain some stats about the disk.
+The disk will have fixed block size of `4KB` (4019 bytes). In addition to providing the API for reading and writing blocks, it will also maintain some stats about the disk.
 
 
 The structure for the stats is as follows:
 
+```c
 typedef struct disk {
     uint32_t size; // size of the entire disk file
     uint32_t blocks; // number of blocks (except stat block)
     uint32_t reads; // number of block reads performed
     uint32_t writes; // number of block writes performed
 } disk_stat;
+```
+
+These stats will take up `16 bytes` of storage at the beginning of the disk.
+
+Therefore, if we consider a disk of size `409600 bytes = (4KB x 100)`, the number of usable blocks will be `99`.
+
+Implement the disk emulator functions as follows:
 
 
-These stats will take up 16bytes of storage at the beginning of the disk.
-
-Therefore, if we consider a disk of size 409600 bytes = (4KB x 100), the number of usable blocks will be 99.
-
-
-int create_disk(char *filename, int nbytes);
+#### int create_disk(char *filename, int nbytes);
 
 Creates a disk file of size nbytes. Initializes disk_stat struct with calculated number of blocks reads and writes as 0. Writes it to the first block. Returns 0 if successful, -1 for error.
 
