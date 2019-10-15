@@ -1,31 +1,33 @@
-CS60038: Assignment 2
+
+# CS60038: Assignment 2
 Building a simple file system with an emulated disk
 Assignment Date: 7th August 2019
 Deadline: 28th August 2019, EOD
+
+---
 
 The objective of this assignment is to get hands-on experience in building a simple file system.
 
 
 This assignment will involve building three components:
 
-A disk emulator
-A simple file system
-Robustness and recovery / NFS interface / FUSE
+* A disk emulator
+* A simple file system
+* FUSE interface
 
 
-Disk Emulator
+## Disk Emulator
 
 Since it is difficult to test our file system on a physical raw disk, we will need to emulate it somehow. For that we are going to create a simple file based disk emulator using standard open, read, write, and seek files in Linux. This will provide APIs for block level access to the emulated disk.
 
 The disk interface will have the following:
 
-
-int create_disk(char *filename, int nbytes);
-int open_disk(char *filename);
-disk_stat* get_disk_stat(int disk);
-int read_block(int disk, int blocknr, void *block_data);
-int write_block(int disk, int blocknr, void *block_data);
-int close_disk(int disk);
+	int create_disk(char *filename, int nbytes);
+	int open_disk(char *filename);
+	disk_stat* get_disk_stat(int disk);
+	int read_block(int disk, int blocknr, void *block_data);
+	int write_block(int disk, int blocknr, void *block_data);
+	int close_disk(int disk);
 
 
 
