@@ -48,8 +48,8 @@ The structure for the stats is as follows:
 ```c
 typedef struct disk {
     uint32_t size; // size of the entire disk file
-    uint32_t blocks; // number of blocks (except stat block)
-    uint32_t reads; // number of block reads performed (except stat block)
+    uint32_t blocks; // number of blocks
+    uint32_t reads; // number of block reads performed
     uint32_t writes; // number of block writes performed
 } disk_stat;
 ```
@@ -70,7 +70,7 @@ Creates a disk file of size `nbytes`. Initializes `disk_stat` struct with calcul
 
 #### `int open_disk(char *filename)`
 
-Opens the disk file of given filename. Check if valid stat is present. Return the **file descriptor** if successful. Return error otherwise.
+Opens the disk file of given filename. Check if valid stat is present. Return the **file descriptor** if successful. Return error otherwise. The returned file descriptor will be used in the following functions.
 
 #### `disk_stat* get_disk_stat(int disk)`
 
@@ -79,13 +79,12 @@ Reads disk_stat from the disk. And returns its pointer (pointer to the structure
 
 #### `int read_block(int disk, int blocknr, void *block_data)`
 
-Assumes that `block_data` is a 4KB buffer. Checks if `blocknr` is a valid block pointer. Reads the block contents into the buffer. Returns 0 if success, -1 otherwise. Also updates the `disk_stat` to increment the `reads` count.
+Assumes that `block_data` is a 4KB buffer. Checks if `blocknr` is a valid block pointer - `blocknr` ranges from `0` to `(B -1)`, where B is the total number of blocks in the disk. Reads the block contents into the buffer. Returns 0 if successful, -1 otherwise. Also updates the `disk_stat` to increment the `reads` count.
 
-**CHECK:** valid block pointer check is done or not. Check if memory is freed for disk_stat.
 
 #### `int write_block(int disk, int blocknr, void *block_data)`
 
-Assumes that the `block_data` is a `4KB` buffer. Check if `blocknr` is a valid block pointer. Write the contents of the `block_data` buffer into the correct block. Return 0 if success, -1 otherwise. Also, update the `disk_stat` to increment the `writes` counter.\
+Assumes that the `block_data` is a `4KB` buffer. Checks if `blocknr` is a valid block pointer. Writes the contents of the `block_data` buffer into the correct block. Returns 0 if success, -1 otherwise. Also, updates the `disk_stat` to increment the `writes` counter.\
 **NOTE**: Updating disk_stat does not affect the writes counter.
 
 
@@ -138,9 +137,9 @@ typedef struct inode {
 } inode;
 ```
 
-Therefore the size of each inode is 32 bytes. Each inode block will contain 128 inodes.
+As we can see the size of each inode is `32 bytes`. Therefore each inode block will contain `128` inodes.
 
-The number of blocks assigned for inodes will be 10% of the total number of available blocks in the disk (except super block).
+The number of blocks assigned for inodes will be `10%` of the total number of available blocks in the disk (except super block).
 
 According to the total number of inodes, the length of the inode bit map is set.
 
@@ -149,15 +148,15 @@ Rest of the blocks are used for data blocks and bit map for data block.
 
 #### Data Blocks
 
-Data blocks are the blocks used for storing actual file contents. We can also use these blocks as indirect blocks for storing indirect block pointers. Later we will be using these data blocks for storing directory structure also.
+Data blocks are the blocks used for storing actual file contents. We can also use these blocks as indirect blocks for storing indirect block pointers. Later we will be using these data blocks for storing directory structures also.
 
 #### Indirect Blocks
 
-These are data blocks storing pointers to other data blocks. In case direct pointers are not enought to accomodate al the block pointers, the indirect blocks will be used to store more pointers. Each pointer is an integer of `4 bytes`, so one indirect block will hold `1024` such pointers.
+These are data blocks storing pointers to other data blocks. In case direct pointers are not enough to accomodate all the block pointers, the indirect blocks will be used to store more pointers. Each pointer is an integer of `4 bytes`, so one indirect block will hold `1024` such pointers. Only one indirect block is allowed per inode.
 
 #### Inode Bitmap
 
-The inode bitmap is used to determine which inodes are occupied and which are free. Accordingly while creating an inode, the first inode index is determined from this bitmap.
+The inode bitmap is used to determine which inodes are occupied and which are free. Accordingly while creating an inode, the first free inode index is determined from this bitmap.
 
 #### Data block bitmap
 
@@ -169,11 +168,17 @@ The following functions needs to be implemented for SFS:
 
 ```c
 int format(int disk);
+
 int mount(int disk);
+
 int create_file();
+
 int remove_file(int inumber);
+
 int stat(int inumber);
+
 int read_i(int inumber, char *data, int length, int offset);
+
 int write_i(int inumber, char *data, int length, int offset);
 ```
 
@@ -182,11 +187,11 @@ int write_i(int inumber, char *data, int length, int offset);
 This function takes input the file descriptor of the emulated disk. In order to write the super block first we need to calculate all the values of blocks, indexes etc.. So the organization of the file system needs to be decided first. This is done as follows:
 
 If the disk has `N` blocks (usable blocks as specified in `disk_stat`), one block is reserved for the super block. Therefore we have `M = N - 1` blocks remaining.
-Among these M blocks, 10 percent is reserved for inode blocks. Therefore the number of inode blocks is `I = 0.1 * M` (take floor). This is also the length of the inode bitmap (in bits). Therefore the number of blocks reserved for the inode bitmap will be `IB = (I / 8) / 4096` (take ceil).
+Among these M blocks, 10 percent is reserved for inode blocks. Therefore the number of inode blocks is `I = 0.1 * M` (take floor). Therefore the total number of inodes will be `I * 128`, which is also the length of the inode bitmap (in bits). Therefore the number of blocks reserved for the inode bitmap will be `IB = (I * 128) / (8 * 4096)` (take ceil).
 
 Therefore the remaining number of blocks is `R = M - I - IB`. These will be used as data blocks and data block bitmap blocks. For simplicity, consider that the length of the data block bitmap is `R bits`. Therefore the number of blocks required for data block bitmap is `DBB = R / (8 * 4096)` (take ceil). Therefore, the remaining are data blocks: `DB = R - DBB`. NOTE: we only consider the first `DB` number of bits of the data block bitmap. 
 
-The values of the superblock structure will be set as follows:
+The values of the super block structure will be set as follows:
 
 ```
 magic_number = 12345
@@ -200,13 +205,15 @@ data_block_idx = 1 + IB + DBB + I
 data_blocks = DB
 ```
 
-The superblock is then written to the disk. The bitmaps are initialized. The inodes are also initialized with `valid = 0`.
+The super block is then written to the disk. 
 
-Return 0 if successful, -1 otherwise.
+The bitmaps are initialized. The inodes are also initialized with `valid = 0`. All these are written to the disk.
+
+Returns 0 if successful, -1 otherwise.
 
 #### `int mount(int disk)`
 
-This method first attempts to read the superblock and then verify the magic_number. If this is successful, a valid SFS is detected. In that case load the bitmaps as well as the mounted file descriptor into the memory. Return 0 if successful, -1 otherwise. The except format, and mount, other functions should return error when operating on unmounted filesystem. 
+This method first attempts to read the super block and then verify the `magic_number`. If this is successful, a valid SFS is detected. In that case load the bitmaps as well as the mounted file descriptor into the memory (this file descriptor is used in the next function calls). Return 0 if successful, -1 otherwise. The except `format`, and `mount`, other functions should return error when operating on unmounted filesystem. 
 
 
 #### `int create_file()`
@@ -215,7 +222,7 @@ Creates a new inode and returns the inode pointer - that is the index of the ino
 
 #### `int remove_file(int inumber)`
 
-Removes an inode along with all corresponding data blocks and indirect pointer blocks. Just set valid to 0, and update the bitmaps.
+Removes an inode along with all corresponding data blocks and indirect pointer blocks. Just set valid to 0 in the iode, and update the bitmaps (both inode and data block bitmaps).(No need to override data blocks or indirect pointer blocks).
 
 #### `int stat(int inumber)`
 
@@ -223,7 +230,7 @@ Returns the stats of the input inode: logical size, and number of data blocks in
 
 #### `int read_i(int inumber, char *data, int length, int offset)`
 
-First checks if `inumber`, `offset` and `length` are valid or not. In case the `inumber` is invalid or `offset` in out of range return error (`-1`). If length is out of range read only till the end of the file and return the length of the data read (in bytes). The data is read into the buffer `data`, which is assumed to be of length `length`. In case of any error return `-1`.
+First checks if `inumber`, `offset` and `length` are valid or not. In case the `inumber` is invalid or `offset` in out of range return error (`-1`). If length is out of range, read only till the end of the file and return the length of the data read (in bytes). The data is read into the buffer `data`, which is assumed to be of length `length`. In case of any error return `-1`.
 
 
 #### `int write_i(int inumber, char *data, int length, int offset)`
@@ -272,6 +279,8 @@ Tutorials:
 ---
 
 **NOTE: In all the functions, take special care to free any allocated memory that is not required once the function returns.**
+
+For bitmap manipulations you may follow this tutorial: [http://www.mathcs.emory.edu/~cheung/Courses/255/Syllabus/1-C-intro/bit-array.html](http://www.mathcs.emory.edu/~cheung/Courses/255/Syllabus/1-C-intro/bit-array.html)
 
 ---
 
