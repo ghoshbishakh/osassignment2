@@ -40,7 +40,7 @@ int close_disk(int disk);
 ```
 
 
-The disk will have fixed block size of `4KB` (4019 bytes). In addition to providing the API for reading and writing blocks, it will maintain some stats about the disk.
+The disk will have fixed block size of `4KB` (4096 bytes). In addition to providing the API for reading and writing blocks, it will maintain some stats about the disk.
 
 
 The structure for the stats is as follows:
