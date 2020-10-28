@@ -245,9 +245,9 @@ Now since we have the basic functions to create, remove, read and write files, w
 
 Assign the first inode for the root directory file.
 
-You can use the following structure for the entries in the directory files:
+<!-- You can use the following structure for the entries in the directory files:
 
-You may modify it to include other information if required. (provide justification)
+You may modify it to include other information if required. (provide justification) -->
 
 Implement the following additional functions to read and write files with file path:
 
