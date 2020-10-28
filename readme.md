@@ -275,6 +275,6 @@ For bitmap manipulations you may follow this tutorial: [http://www.mathcs.emory.
 #### In every source code file, students need to comment their name, roll number.
 
 
-### Do not make any assumption. If you find anything ambiguous in the assignment statement, do not hesitate to post it to the piazza.
+### Do not make any assumption. If you find anything ambiguous in the assignment statement, do not hesitate to post it to teams.
 
 #### DO NOT COPY CODE FROM OTHER GROUPS. WE WILL NOT EVALUATE A SOLUTION IF FOUND COPIED. ALL INVOLVED GROUPS WILL BE AWARDED ZERO.
