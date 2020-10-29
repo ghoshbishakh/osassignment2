@@ -3,8 +3,8 @@
 
 Building a simple file system with an emulated in-memory disk.
 
-Assignment Date: \
-Deadline: 
+Assignment Date: 29 October 2020\
+Deadline: 20 November 2020
 
 ---
 
