@@ -52,7 +52,7 @@ The disk will have fixed block size of `4KB` (4096 bytes). In addition to provid
 These stats will take up `24 bytes` of storage at the beginning of the disk.
 
 Therefore, if we consider a disk of size `409600 bytes = (4KB x 100)`, the number of usable blocks will be `99`.
-Again, if we consider a disk of size `409616 bytes = (4KB x 100) + 24`, the number of usable blocks will be `100`.
+Again, if we consider a disk of size `409624 bytes = (4KB x 100) + 24`, the number of usable blocks will be `100`.
 
 
 Implement the disk emulator functions as follows:
@@ -210,16 +210,16 @@ Returns 0 if successful, -1 otherwise.
 
 #### `int mount(disk *diskptr)`
 
-This method first attempts to read the super block and then verify the `magic_number`. If this is successful, a valid SFS is detected. In that case load the bitmaps as well as the mounted file descriptor into the memory (this file descriptor is used in the next function calls). Return 0 if successful, -1 otherwise. The except `format`, and `mount`, other functions should return error when operating on unmounted filesystem. 
+This method first attempts to read the super block and then verify the `magic_number`. If this is successful, a valid SFS is detected. Return 0 if successful, -1 otherwise. The except `format`, and `mount`, other functions should return error when operating on unmounted filesystem. 
 ( you need to maintain the state i.e the mounted disk pointer )
 
 #### `int create_file()`
 
-Creates a new inode and returns the inode pointer - that is the index of the inode (starting from 0). Initialize the size to 0 and valid to 1. Accordingly update the inode bitmap (not only in memory but also on the disk). Return -1 if error or if no inodes are left.
+Creates a new inode and returns the inode pointer - that is the index of the inode (starting from 0). Initialize the size to 0 and valid to 1. Accordingly update the inode bitmap. Return -1 if error or if no inodes are left.
 
 #### `int remove_file(int inumber)`
 
-Removes an inode along with all corresponding data blocks and indirect pointer blocks. Just set valid to 0 in the iode, and update the bitmaps (both inode and data block bitmaps).(No need to override data blocks or indirect pointer blocks).
+Removes an inode along with all corresponding data blocks and indirect pointer blocks. Just set valid to 0 in the inode, and update the bitmaps (both inode and data block bitmaps).(No need to ovewrite data blocks or indirect pointer blocks).
 
 #### `int stat(int inumber)`
 
