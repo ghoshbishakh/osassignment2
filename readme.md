@@ -58,9 +58,9 @@ Again, if we consider a disk of size `409624 bytes = (4KB x 100) + 24`, the numb
 Implement the disk emulator functions as follows:
 
 
-#### `int create_disk(disk *diskptr, int nbytes);`
+#### `disk * create_disk(int nbytes);`
 
-Creates a disk of size `nbytes`. Initializes `disk` struct with calculated number of blocks, and reads, writes as 0. Writes it to the pointer `diskptr`. Returns 0 if successful, -1 for error. The size of the disk file must be exactly `nbytes`.
+Creates a disk of size `nbytes`. Initializes `disk` struct with calculated number of blocks, and reads, writes as 0. Returns the pointer to the created disk (disk *) if successful, NULL for error.
 
 You have to store the disk as an array of blocks. The pointer to the array of blocks, as well as other metadata will be kept in the `disk` structure:
 
